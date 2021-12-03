@@ -49,3 +49,5 @@ public static void insert(int x1, int y1, int x2, int y2, int c) {
 - [LeetCode 995. K 连续位的最小翻转次数](https://leetcode-cn.com/problems/minimum-number-of-k-consecutive-bit-flips/)
 - [LeetCode 732. 我的日程安排表 III](https://leetcode-cn.com/problems/my-calendar-iii/)
 - [LeetCode 1674. 使数组互补的最少操作次数](https://leetcode-cn.com/problems/minimum-moves-to-make-array-complementary/)
+
+- [AcWing 101. 最高的牛](https://www.acwing.com/problem/content/description/103/)
