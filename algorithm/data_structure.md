@@ -229,3 +229,80 @@ for (int i = 0; i < n; i++) {
 ```
 
 </details>
+
+
+## Trie
+
+Trie树可以用来高效地插入和查找字符串。
+
+<details>
+<summary>算法模板 (java 数组实现)</summary>
+
+```java
+static int N = 100010;
+static int[][] son = new int[N][26];
+static int[] cnt = new int[N];
+static int idx = 0;
+
+public static void insert(String word) {
+    int p = 0;
+    
+    for (char c : word.toCharArray()) {
+        int u = c -'a';
+        if (son[p][u] == 0) son[p][u] = ++idx;
+        p = son[p][u];
+    }
+    
+    cnt[p]++;
+}
+
+public static int query(String word) {
+    int p = 0;
+    
+    for (char c : word.toCharArray()) {
+        int u = c - 'a';
+        if (son[p][u] == 0) return 0;
+        p = son[p][u];
+    }
+    
+    return cnt[p];
+}
+```
+
+</details>
+
+<details>
+<summary>算法模板 (java 内部类实现)</summary>
+
+```java
+static class Node {
+    Node[] children = new Node[26];
+    int cnt = 0;
+}
+
+public void insert(Node root, String word) {
+    Node p = root;
+    
+    for (char c : word.toCharArray()) {
+        int u = c -'a';
+        if (p.children[u] == null) p.children[u] = new Node();
+        p = p.children[u];
+    }
+    
+    p.cnt++;
+}
+
+public int query(Node root, String word) {
+    Node p = root;
+    
+    for (char c : word.toCharArray()) {
+        int u = c - 'a';
+        if (p.children[u] == null) return 0;
+        p = p.children[u];
+    }
+    
+    return p.cnt;
+}
+```
+
+</details>
