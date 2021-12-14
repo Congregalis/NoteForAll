@@ -60,7 +60,7 @@ main end, get message: task done!
 ```
 发现任务在 **pool-1-thread-1** 这个线程中被执行。
 
-其他使用示例：
+4. 其他使用示例：
 - 如果先取消，再开线程执行该任务，会发现控制台不打印 `I'm running...` 了。
 ```java
 future.cancel(true);
@@ -81,7 +81,15 @@ FutureTask<String> future = new FutureTask<>(new Callable<String>() {
 
 //  先执行，再以中断方式取消，则会直接中断
 new Thread(future).start();
-Thread.sleep(10); // 防止 cancel 先于 上面的 start 执行，导致任务还没开始的时候就取消了
+Thread.sleep(10); // 防止 cancel 先于上面的 start 执行，导致任务还没开始的时候就取消了
 future.cancel(true);
 ```
-按这样执行则会发现成功取消了任务的执行。
+按上面执行则会发现成功取消了任务的执行。
+
+按下面这样执行则会发现任务照常执行了下去。
+```java
+//  先执行，再以非中断方式取消，则任务继续执行
+new Thread(future).start();
+Thread.sleep(10); // 防止 cancel 先于上面的 start 执行，导致任务还没开始的时候就取消了
+future.cancel(false); // 不中断
+```
