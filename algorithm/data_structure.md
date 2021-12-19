@@ -352,3 +352,94 @@ public static int find(int x) {
 
 例题：
 - [食物链](https://www.acwing.com/problem/content/242/)
+
+## 堆
+
+即一个完全二叉树，其保证父节点小于（或大于）其任意一个子结点（或子结点的子结点...）。
+
+（以最小堆为例）
+实现一个堆需要什么？
+
+1. 插入一个数 x
+    <details>
+    <summary>MASK</summary>
+
+    ```java
+    heap[++size] = x;
+    up(x); // 上浮
+    ```
+
+    </details>
+    
+2. 求当前堆中最小值（即堆顶）
+    <details>
+    <summary>MASK</summary>
+    
+    `return heap[1]; // 默认下标从 1 开始`
+
+    </details>
+
+3. 删除最小值（即弹出堆顶）
+    <details>
+    <summary>MASK</summary>
+    
+    ```java
+    heap[1] = heap[size];
+    size--;
+    down(1); // 下沉
+    ```
+
+    </details>
+
+4. 删除任意一个位置 k
+    <details>
+    <summary>MASK</summary>
+    
+    ```java
+    heap[k] = heap[size];
+    size--;
+    down(k); // 下沉
+    ```
+
+    </details>
+    
+5. 修改任意一个位置 k 为 x
+    <details>
+    <summary>MASK</summary>
+    
+    ```java
+    heap[k] = x;
+    // 因为不知道当前 x 应该上浮还是下沉，所以索性都做一遍，不会对结果造成影响
+    down(k); // 下沉
+    up(k); // 上浮
+    ```
+
+    </details>
+
+<details>
+<summary>核心函数</summary>
+
+```java
+int[] h; // 存储堆的底层数组，默认下标从 1 开始
+int size; // 堆的大小
+
+// 将位置 u 下沉
+public static void down(int u) {
+    int t = u;
+    if (2*u <= size && h[2*u] < h[t]) t = 2*u;
+    if (2*u + 1 <= size && h[2*u+1] < h[t]) t = 2*u + 1;
+    
+    if (u != t) {
+        swap(u, t);
+        down(t);
+    }
+}
+
+public static void swap(int x, int y) {
+    int tmp = h[x];
+    h[x] = h[y];
+    h[y] = tmp;
+}
+```
+
+</details>
