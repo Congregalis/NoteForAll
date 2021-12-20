@@ -211,7 +211,7 @@ for (int i = 0; i < n; i++) {
 ```java
 static int N = 100010; // 开的数组大小，根据需求去开
     
-static int[] q = new int[N]; // 队列底层的数组
+static int[] q = new int[N]; // 队列底层的数组，注：存放的是下标，而非元素本身
 static int hh = 0, tt = -1; // hh 代表指向队头元素，tt 代表指向队尾元素 （tt 从 0 开始表示队列有元素）
         
 hh = 0; tt = -1;
@@ -230,6 +230,8 @@ for (int i = 0; i < n; i++) {
 
 </details>
 
+### 例题
+- [LC 239. 滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)
 
 ## Trie
 
