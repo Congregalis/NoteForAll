@@ -445,3 +445,121 @@ public static void swap(int x, int y) {
 ```
 
 </details>
+
+## 散列表
+
+可以快速地
+1. 插入元素
+2. 判断元素是否在其中
+
+两种经典的解决冲突实现方式：**开放寻址法**和**拉链法**
+
+<details>
+<summary>模拟散列表 (开放寻址法)</summary>
+
+```java
+import java.util.Scanner;
+import java.util.Arrays;
+
+class Main {
+    
+    static final int N = 200003; // 通常要开本来数据限制的 2~3 倍，为了减少冲突
+    static final int INF = 0x3f; // 大于 1e9 的量级，可以看作无穷
+    static int[] h = new int[N];
+    
+    public static int find(int x) {
+        int k = (x % N + N) % N;
+        
+        while (h[k] != INF && h[k] != x) {
+            k++;
+            if (k == N) k = 0;
+        }
+        
+        return k;
+    }
+    
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        int n = Integer.parseInt(sc.nextLine());
+        Arrays.fill(h, INF);
+        
+        while ((n--) > 0) {
+            String[] line = sc.nextLine().split(" ");
+            char od = line[0].charAt(0);
+            int x = Integer.parseInt(line[1]);
+            int k = find(x);
+            
+            if (od == 'I') {
+                // 1. 插入元素
+                h[k] = x;
+            } else {
+                // 2. 查找是否包含元素
+                if (h[k] != INF) System.out.println("Yes");
+                else System.out.println("No");
+            }
+        }
+    }
+}
+```
+
+</details>
+
+<details>
+<summary>模拟散列表 (拉链法)</summary>
+
+```java
+import java.util.Scanner;
+import java.util.Arrays;
+
+class Main {
+    
+    static int N = 100003; // 为了减少冲突，最好取质数 （某研究的结论）
+    static int[] e = new int[N], ne = new int[N], h = new int[N];
+    static int idx = 0;
+    
+    public static void insert(int x) {
+        int k = (x % N + N) % N;
+        
+        e[idx] = x;
+        ne[idx] = h[k];
+        h[k] = idx++;
+    }
+    
+    public static boolean query(int x) {
+        int k = (x % N + N) % N;
+        
+        for (int i = h[k]; i != -1; i = ne[i]) {
+            if (e[i] == x) return true;
+        }
+        
+        return false;
+    }
+    
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        int m = sc.nextInt();
+        sc.nextLine();
+        
+        Arrays.fill(h, -1);
+        
+        while ((m--) > 0) {
+            String[] line = sc.nextLine().split(" ");
+            char od = line[0].charAt(0);
+            int x = Integer.parseInt(line[1]);
+            
+            if (od == 'I') {
+                // 1. 插入元素
+                insert(x);
+            } else {
+                // 2. 查找是否包含元素
+                if (query(x)) System.out.println("Yes");
+                else System.out.println("No");
+            }
+        }
+    }
+}
+```
+
+</details>
