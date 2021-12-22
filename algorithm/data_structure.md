@@ -468,7 +468,7 @@ class Main {
     static int[] h = new int[N];
     
     public static int find(int x) {
-        int k = (x % N + N) % N;
+        int k = (x % N + N) % N; // 额外 +N 再 %N 是为了防止出现负数
         
         while (h[k] != INF && h[k] != x) {
             k++;
@@ -519,7 +519,7 @@ class Main {
     static int idx = 0;
     
     public static void insert(int x) {
-        int k = (x % N + N) % N;
+        int k = (x % N + N) % N; // 额外 +N 再 %N 是为了防止出现负数
         
         e[idx] = x;
         ne[idx] = h[k];
