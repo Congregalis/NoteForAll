@@ -563,3 +563,86 @@ class Main {
 ```
 
 </details>
+
+### 字符串哈希
+
+就是**将一个字符串唯一的映射为一个数值**，其目的在于比较字符串时可以以 O(1) 的时候比较它们是否相等。
+
+字符串哈希的方法很多，这里仅介绍一种。形象化地说，就是将一个字符串看作为一个P进制，然后将其转为10进制从而变成我们熟悉的数值。
+
+如一个字符串 ABC ，其哈希函数就应该为 $$ h[ABC] = A*P^2 + B*P^1 + C*P^0 $$
+
+一般地，为了防止字符串映射后的值过大，会再对其哈希值模上一个数 Q ，一般 **Q 取 $2^{64}$**，正好是 java 中 long 的取值范围，**P 取 133 或 13331**，这样可以尽可能地避免冲突。
+
+<details>
+<summary>模板题</summary>
+
+
+### 题目：
+> 给定一个长度为n的字符串，再给定m个询问，每个询问包含四个整数l1,r1,l2,r2，请你判断[l1,r1]和[l2,r2]这两个区间所包含的字符串子串是否完全相同。<br>
+字符串中只包含大小写英文字母和数字。
+### 输入格式
+> 第一行包含整数n和m，表示字符串长度和询问次数。<br>
+第二行包含一个长度为n的字符串，字符串中只包含大小写英文字母和数字。<br>
+接下来m行，每行包含四个整数l1,r1,l2,r2，表示一次询问所涉及的两个区间。<br>
+注意，字符串的位置从1开始编号。
+### 输出格式
+> 对于每个询问输出一个结果，如果两个字符串子串完全相同则输出“Yes”，否则输出“No”。<br>
+每个结果占一行。
+### 数据范围
+> 1≤n,m≤105
+
+### 输入样例：
+> 8 3<br>
+aabbaabb<br>
+1 3 5 7<br>
+1 3 6 8<br>
+1 2 1 2
+
+### 输出样例：
+> Yes<br>
+No<br>
+Yes
+
+### 解：
+```java
+import java.util.Scanner;
+
+class Main {
+    
+    static int N = 100010, P = 131;
+    static long[] h = new long[N], p = new long[N];
+    
+    public static long get(int l, int r) {
+        return h[r] - h[l-1]*p[r-l+1];
+    }
+    
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        int n = sc.nextInt(), m = sc.nextInt();
+        sc.nextLine();
+        String s = sc.nextLine();
+        
+        p[0] = 1;
+        for (int i = 1; i <= n; i++) {
+            char c = s.charAt(i-1);
+            p[i] = p[i-1] * P;
+            h[i] = h[i-1] * P + c;
+        }
+        
+        while ((m--) > 0) {
+            int l1 = sc.nextInt(), r1 = sc.nextInt();
+            int l2 = sc.nextInt(), r2 = sc.nextInt();
+
+            if (get(l1, r1) == get(l2, r2)) System.out.println("Yes");
+            else System.out.println("No");
+        }
+    }
+}
+```
+
+</details>
+
+一些例题：
+- [LC 1316. 不同的循环子字符串](https://leetcode-cn.com/problems/distinct-echo-substrings/)
