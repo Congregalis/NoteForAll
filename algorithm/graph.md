@@ -1,5 +1,37 @@
 # 图论
 
+图论很重要
+
+## 构图方式
+
+若图比较**稠密**，或者**点个数不多**，可以使用**邻接矩阵**存储图。
+
+若图比较**稀疏**，或者**点个数达到 1e5 以上** ，可以使用**邻接表**存储图。
+
+### 邻接表
+
+```java
+static int[] h = new int[N], e = new int[N], ne = new int[N]
+static int[] dist = new int[N], w = new int[N];
+
+// 添加一条 a 到 b 的边，c 为该边的权重
+public static void add(int a, int b, int c) {
+    e[idx] = b;
+    ne[idx] = h[a];
+    w[idx] = c;
+    h[a] = idx++;
+}
+```
+
+### 邻接矩阵
+
+```java
+static int[][] g = new int[N][N];
+
+// 添加一条 a 到 b 的边，c 为该边的权重，取最小值是为了防止重边，若非求最短路径，可以使用其他策略
+g[a][b] = Math.min(g[a][b], c);
+```
+
 ## 拓扑排序
 
 使用 BFS 的思想，入度为 0 的结点先入队，然后依次删除队列中的点所连接的边，若此时有结点的入度变为 0，则使其入队。
@@ -50,16 +82,13 @@ public static void bfs() {
 
 求**带权图**的**单源最短路径**，支持自环与重边，**不支持负边权**。
 
-若图比较**稠密**，或者**点个数不多**，可以使用**邻接矩阵**存储图。
-
-若图比较**稀疏**，或者**点个数达到 1e5 以上** ，可以使用**邻接表**存储图。
-
 ### 朴素版 Dijkstra
+
+因这种方法只能处理点和边少的情况，所以使用邻接矩阵。
 
 参考代码：
 ```java
 public static int dijkstra(int start, int n) {
-    Arrays.fill(dist, 
     Arrays.fill(dist, 0x3f3f3f3f);
     dist[start] = 0;
     
@@ -81,12 +110,13 @@ public static int dijkstra(int start, int n) {
         }
     }
     
-    return dist[n] == 
-    Arrays.fill(dist, 0x3f3f3f3f ? -1 : dist[n];
+    return dist[n] == 0x3f3f3f3f ? -1 : dist[n];
 }
 ```
 
 ### 优化版 Dijkstra
+
+因这种方法一般处理点和边比较多的情况，所以使用邻接表。
 
 使用**最小堆**来优化，使用 O(1) 的时间找到不在集合中的距离最近的点，使用 O(mlogn) 的时间更新最小距离吗，从而优化整体时间复杂度
 
