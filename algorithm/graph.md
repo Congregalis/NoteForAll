@@ -11,7 +11,7 @@
 ### 邻接表
 
 ```java
-static int[] h = new int[N], e = new int[N], ne = new int[N]
+static int[] h = new int[N], e = new int[N], ne = new int[N];
 static int[] dist = new int[N], w = new int[N];
 
 // 添加一条 a 到 b 的边，c 为该边的权重
