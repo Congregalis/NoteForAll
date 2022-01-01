@@ -155,6 +155,46 @@ public static int dijkstra(int n) {
 
 ## bellman-ford
 
+非常暴力的做法，但可以处理**负权边**，无法处理**负环**（负权回路）。最大的特点是可以可以找某点到某点**最多经过 k 条边**的最短距离，即处理**有边数限制的最短路**。
 
+具体思想是遍历 n （n个点）或 k （最多经过 k 条边） 次，在其中再遍历每个边并更新最短距离。所以时间复杂度为 O(nm) (n为点数，m为边数)。
 
+参考代码：
+```java
+static int N = 510, M = 10010;
+static int[] dist = new int[N], backup = new int[N]; // 每个点到1号点的最短距离，backup存储上次迭代的结果
+static Edge[] edges = new Edge[M]; // 存储所有边
+
+static class Edge {
+    // 每条边由 a-边起点、b-边终点，c-该边的权重 构成
+    int a, b, c;
+    
+    Edge(int a, int b, int c) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+    }
+}
+
+public static void bellmanFord(int n, int m, int k) {
+    Arrays.fill(dist, 0x3f3f3f3f);
+    dist[1] = 0;
+    
+    // 遍历 k 次（边数限制为 k，若无边数限制，则遍历 n 次）
+    for (int i = 0; i < k; i++) {
+        System.arraycopy(dist, 1, backup, 1, n); // 拷贝数组，存储上次迭代结果
+        
+        // 遍历所有边
+        for (int j = 0; j < m; j++) {
+            int a = edges[j].a, b = edges[j].b, c = edges[j].c;
+            
+            dist[b] = Math.min(dist[b], backup[a] + c); // 更新最短距离
+        }
+    }
+}
+
+// 小细节：这里不能为 dist[n] == 0x3f3f3f3f ，因为存在负权边，有可能存在 dist[n] 被更新为 0x3f 减某个不大的数，所以这里要这样判断
+if (dist[n] > 0x3f3f3f3f / 2) System.out.println("impossible");
+else System.out.println(dist[n]);
+```
 
