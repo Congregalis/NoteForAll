@@ -198,3 +198,89 @@ if (dist[n] > 0x3f3f3f3f / 2) System.out.println("impossible");
 else System.out.println(dist[n]);
 ```
 
+## SPFA
+本质上就是**对 bellman-ford 算法的优化**，在 bellman-ford 算法中，我们会遍历所有边来更新最短距离，但实际上不需要遍历这么多。当一个点的前驱结点更新的时候才需要更新这个点，因此我们可以使用一个**队列**来加入需要更新的点，减少一些时间开销。
+
+注意，在最差情况下 spfa 算法就退化成 bellman-ford 了，也就是要遍历所有边。
+
+参考代码：
+```java
+public static int spfa(int n) {
+    Arrays.fill(dist, 0x3f3f3f3f);
+    
+    Queue<Integer> q = new LinkedList<>();
+    q.offer(1);
+    dist[1] = 0;
+    st[1] = true; // st 用来记录某个点是否在队列中
+    
+    while (!q.isEmpty()) {
+        int t = q.poll();
+        st[t] = false;
+        
+        // 遍历所有出边，查看是否有点需要更新
+        for (int i = h[t]; i != -1; i = ne[i]) {
+            int j = e[i];
+            if (dist[j] > dist[t] + w[i]) {
+                dist[j] = dist[t] + w[i];
+                if (!st[j]) {
+                    // 若该点 j 不在队列中，则将其入队，并更新 st 数组
+                    q.offer(j);
+                    st[j] = true;
+                }
+            }
+        }
+    }
+    
+    return dist[n];
+}
+```
+
+SPFA 还可以用来**求是否存在负环**，参考代码如下：
+```java
+public static boolean spfa(int n) {
+    Queue<Integer> q = new LinkedList<>();
+
+    // 若是求是否存在负环，则每个点都要入队，因为不是求从 点1 到某个点是否存在负环，而是所有点为起点的情况下是否存在负环
+    for (int i = 1; i <= n; i++) {
+        q.offer(i);
+        st[i] = true;
+    }
+    
+    while (!q.isEmpty()) {
+        int t = q.poll();
+        st[t] = false;
+        
+        for (int i = h[t]; i != -1; i = ne[i]) {
+            int j = e[i];
+            
+            if (dist[j] > dist[t] + w[i]) {
+                dist[j] = dist[t] + w[i];
+                cnt[j] = cnt[t] + 1; // 更新 点j 的边数
+                if (cnt[j] >= n) return true; // 如果 cnt[i] 中有超过 n - 1 条边，则说明存在负环
+                if (!st[j]) {
+                    q.offer(j);
+                    st[j] = true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+```
+**cnt 数组存放某个点到源点最短距离上有多少条边**。根据**抽屉原理**，总共有 n 个点即 n - 1 条边，而如果 cnt[i] 中有超过 n - 1 条边，则说明存在负环。
+
+## Floyd
+
+解**多源最短路**算法，可以求任意两点间的最短距离，可以存在负权边，但不能存在负权回路。
+思路很简单，就是暴力三重循环，本质上是基于 dp 的思想。
+
+参考代码：
+```java
+public static void floyd(int n) {
+    for (int k = 1; k <= n; k++)
+        for (int i = 1; i <= n; i++)
+            for (int j = 1; j <= n; j++)
+                d[i][j] = Math.min(d[i][j], d[i][k] + d[k][j]);
+}
+```
