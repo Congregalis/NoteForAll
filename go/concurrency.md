@@ -68,6 +68,8 @@ select {
 }
 ```
 
+### 练习：使用信道同步来判断等价二叉查找树
+原题在[练习：等价二叉查找树](https://tour.go-zh.org/concurrency/7)
 
 ```go
 package main
@@ -127,7 +129,8 @@ func main() {
 调用 `Lock` 方法则加锁， `UnLock` 方法则解锁
 
 
-## 练习：Web爬虫
+## 综合练习：Web爬虫
+原题在[练习：Web 爬虫](https://tour.go-zh.org/concurrency/10)
 
 我的做法如下：
 ```go
